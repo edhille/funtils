@@ -1,0 +1,29 @@
+{
+  "name": "funtils",
+  "version": "0.0.1",
+  "description": "Functional utility library",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha ./test/**/*.mspec.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/edhille/funtils.git"
+  },
+  "keywords": [
+    "Javascript",
+    "functional",
+    "utilities"
+  ],
+  "author": "Ted Hille",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/edhille/funtils/issues"
+  },
+  "homepage": "https://github.com/edhille/funtils",
+  "devDependencies": {
+    "chai": "^1.9.2",
+    "mocha": "^1.21.5",
+    "sinon": "^1.10.3"
+  }
+}

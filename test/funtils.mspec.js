@@ -74,6 +74,36 @@ describe('utils', function() {
       });
    });
 
+   describe('#merge', function () {
+      var merge = utils.merge;
+
+      it('should produce object with same properties/values as input if no props to merge', function () {
+         var orig = { original: 'value' };
+
+         merge(orig, {}).should.eql(orig);
+      });
+
+      it('should override object property if provided an override', function () {
+         merge({ original: 'value' }, { original: 'changed' }).original.should.equal('changed');
+      });
+
+      it('should add a new property to an object', function () {
+         merge({ original: 'value' }, { added: 'stuff' }).added.should.equal('stuff');
+      });
+
+      it('should replace an array if an override is provided', function () {
+         merge({ arr: [1,2] }, { arr: [3,4] }).arr.should.have.members([3,4]);
+      });
+
+      it('should replace sub-properties', function () {
+         merge({ obj: { foo: 'bar' } }, { obj: { foo: 'baz' } }).obj.foo.should.equal('baz');
+      });
+
+      it('should add sub-properties', function () {
+         merge({ obj: { foo: 'bar' } }, { obj: { baz: 'bip' } }).obj.baz.should.equal('bip');
+      });
+   });
+
    describe('#existy', function () {
       var existy = utils.existy;
 

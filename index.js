@@ -33,6 +33,24 @@ function clone(obj_or_array) {
 }
 
 /**
+ * merge given props with given object to produce new object where props overrides/adds to object
+ *
+ * @param {Object} obj - base object
+ * @param {Object} props - properties to override/add to obj
+ *
+ * @return {Object} newObj - merged object
+ */
+function merge(obj, props) {
+   var newObj = clone(obj);
+
+   for (var prop in props) {
+      if (props.hasOwnProperty(prop)) newObj[prop] = props[prop];
+   }
+
+   return newObj;
+}
+
+/**
  * functional method to slice array or arguments
  */
 var slice = Function.call.bind([].slice);
@@ -221,6 +239,7 @@ function generateScale(inputMin, inputMax, outputMin, outputMax) {
 
 module.exports = {
    clone: clone,
+   merge: merge,
    slice: slice,
    splice: splice,
    reduce: reduce,

@@ -307,4 +307,26 @@ describe('utils', function() {
          
       });
    });
+
+   describe('#monad', function () {
+      var monader, monad;
+
+      beforeEach(function () {
+         monader = utils.monad(function (monad, value) { return value + ' - modified'; });
+         monader.lift('lifted', function (value) { return value + ' - lifted'; });
+         monad = monader('initial value');
+      });
+
+      afterEach(function () {
+         monader = monad = null;
+      });
+
+      it('should be able to unwrap the given value', function () {
+         monad.value().should.equal('initial value - modified');
+      });
+
+      it('should be able to call the lifted function', function () {
+         monad.lifted().value().should.equal('initial value - modified - lifted - modified');
+      });
+   });
 });

@@ -9,22 +9,16 @@
  * @param {object|array} obj_or_array Object or Array to deep clone
  */
 function clone(obj_or_array) {
-   var prop, cloneObj = {}, cloneArr = [];
+   var cloneObj = {};
 
    if (obj_or_array instanceof Array) {
-		obj_or_array.forEach(function (elem) {
-			cloneArr.push(clone(elem));
-		});
-
-		return cloneArr;
+		return obj_or_array.map(clone);
    } else if (obj_or_array instanceof Function) {
 		return obj_or_array;
-   } else if (obj_or_array instanceof Object) {
-      for (prop in obj_or_array) {
-         if (obj_or_array.hasOwnProperty(prop)) {
-            cloneObj[prop] = clone(obj_or_array[prop]);
-         }
-      }
+   } else if (obj_or_array instanceof Object || typeof obj_or_array === 'object') {
+      Object.keys(obj_or_array).map(function (prop) {
+         cloneObj[prop] = clone(obj_or_array[prop]);
+      });
 
       return cloneObj;
    }
@@ -43,9 +37,9 @@ function clone(obj_or_array) {
 function merge(obj, props) {
    var newObj = clone(obj);
 
-   for (var prop in props) {
-      if (props.hasOwnProperty(prop)) newObj[prop] = props[prop];
-   }
+   Object.keys(props).map(function (prop) {
+      newObj[prop] = props[prop];
+   });
 
    return newObj;
 }
@@ -237,6 +231,51 @@ function generateScale(inputMin, inputMax, outputMin, outputMax) {
    };   
 }
 
+/**
+ * monad generator based off Crockford's monad implementation
+ *
+ * @param{Function} modifier - helper function to alter value for unit() calls
+ *
+ * @return {Object} monad for wrapping values
+ */
+function monad(modifier) {
+   var prototype = Object.create(null);
+
+   prototype._is_monad = true;
+
+   function unit(value) {
+      var monad = Object.create(prototype);
+
+      if (typeof modifier === 'function') {
+         value = modifier(monad, value);
+      }
+
+      monad.bind = function (fn, args) {
+         var argsCopy = args ? [].slice.call(args) : [],
+             result = fn.apply(null, [value].concat(argsCopy));
+
+         return result && result._is_monad ? result : unit(result);
+      };
+
+      monad.value = function () { return value; };
+
+      return monad;
+   }
+
+   unit.lift = function (name, fn) {
+      if (prototype[name]) throw new Error('"' + name + '" is already defined');
+
+      prototype[name] = function (/* args */) {
+         var result = this.bind(fn, arguments);
+         return result && result._is_monad ? result : unit(result);
+      };
+
+      return unit;
+   };
+
+   return unit;
+}
+
 module.exports = {
    clone: clone,
    merge: merge,
@@ -250,6 +289,7 @@ module.exports = {
    curry: curry,
    partial: partial,
    compose: compose,
+   monad: monad,
    sortNumeric: sortNumeric,
    values: values,
    memoize: memoize,

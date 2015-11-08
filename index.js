@@ -177,18 +177,17 @@ function values(obj) {
  * @param {Function}
  */
 function memoize(fn) {
-   var memo,
-       called = false;
+	var memo = {};
 
-   return function() {
-      if (called) return memo;
+	return function _memoize() {
+		var key = JSON.stringify(arguments);
 
-      memo = fn.apply(fn, arguments);
+		if (typeof memo[key] === 'undefined') {
+			memo[key] = fn.apply(null, arguments);
+		}
 
-      called = true;
-
-      return memo;
-   };
+		return memo[key];
+	};
 }
 
 /**

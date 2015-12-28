@@ -1,6 +1,3 @@
-/* vim: set expandtab ts=3 sw=3: */
-/* jshint node: true, expr: true, es5: true */
-
 'use strict';
 
 /**
@@ -9,21 +6,21 @@
  * @param {object|array} obj_or_array Object or Array to deep clone
  */
 function clone(obj_or_array) {
-   var cloneObj = {};
+	var cloneObj = {};
 
-   if (obj_or_array instanceof Array) {
+	if (obj_or_array instanceof Array) {
 		return obj_or_array.map(clone);
-   } else if (obj_or_array instanceof Function) {
+	} else if (obj_or_array instanceof Function) {
 		return obj_or_array;
-   } else if (obj_or_array instanceof Object || typeof obj_or_array === 'object') {
-      Object.keys(obj_or_array).map(function (prop) {
-         cloneObj[prop] = clone(obj_or_array[prop]);
-      });
+	} else if (obj_or_array instanceof Object || typeof obj_or_array === 'object') {
+		Object.keys(obj_or_array).map(function (prop) {
+			cloneObj[prop] = clone(obj_or_array[prop]);
+		});
 
-      return cloneObj;
-   }
+		return cloneObj;
+	}
 
-   return obj_or_array;
+	return obj_or_array;
 }
 
 /**
@@ -35,13 +32,13 @@ function clone(obj_or_array) {
  * @return {Object} newObj - merged object
  */
 function merge(obj, props) {
-   var newObj = clone(obj);
+	var newObj = clone(obj);
 
-   Object.keys(props).map(function (prop) {
-      newObj[prop] = props[prop];
-   });
+	Object.keys(props).map(function (prop) {
+		newObj[prop] = props[prop];
+	});
 
-   return newObj;
+	return newObj;
 }
 
 /**
@@ -64,7 +61,7 @@ var reduce = Function.call.bind(Array);
  */
 function existy(test) {
    /* jshint eqnull: true */
-   return test != null;
+	return test != null;
 }
 
 /**
@@ -75,25 +72,22 @@ function existy(test) {
  * @return {function}
  */
 function dispatch(/* fns */) {
-   var fns = slice(arguments),
-       size = fns.length;
+	var fns = slice(arguments),
+		size = fns.length;
 
-   return function do_dispatch(target /* args */) {
-      var args = slice(arguments, 1),
-          ret,
-          fn,
-          i;
+	return function do_dispatch(target /* args */) {
+		var args = slice(arguments, 1), ret, fn, i;
 
-      for (i = 0; i < size; ++i) {
-         fn = fns[i];
+		for (i = 0; i < size; ++i) {
+			fn = fns[i];
 
-         ret = fn.apply(null, [target].concat(args));
+			ret = fn.apply(null, [target].concat(args));
 
-         if (existy(ret)) return ret;
-      }
+			if (existy(ret)) return ret;
+		}
 
-      return ret;
-   };
+		return ret;
+	};
 }
 
 /**
@@ -104,7 +98,7 @@ function dispatch(/* fns */) {
  * @returns {Mixed}
  */
 function identity(me) {
-   return function _identity() { return me; };
+	return function _identity() { return me; };
 }
 
 /**
@@ -115,9 +109,9 @@ function identity(me) {
  * @returns {function}
  */
 function curry(fun) {
-   return function _curry(arg) {
-      return fun(arg);
-   };
+	return function _curry(arg) {
+		return fun(arg);
+	};
 }
 
 /**
@@ -129,11 +123,11 @@ function curry(fun) {
  * @returns {function}
  */
 function partial(fun /* pargs */) {
-   var pargs = slice(arguments, 1);
+	var pargs = slice(arguments, 1);
 
-   return function _partial(/* args */) {
-      return fun.apply(null, pargs.concat(slice(arguments)));
-   };
+	return function _partial(/* args */) {
+		return fun.apply(null, pargs.concat(slice(arguments)));
+	};
 }
 
 /**
@@ -145,18 +139,18 @@ function partial(fun /* pargs */) {
  * @returns {function}
  */
 function compose(f, g) {
-   return function _composee(x) {
-      return f(g(x));
-   };
+	return function _composee(x) {
+		return f(g(x));
+	};
 }
 
 /**
  * sorts numerically
  */
 function sortNumeric(a, b) {
-   a = +a;
-   b = +b;
-   return a > b ? 1 : a < b ? -1 : 0;
+	a = +a;
+	b = +b;
+	return a > b ? 1 : a < b ? -1 : 0;
 }
 
 /**
@@ -199,14 +193,13 @@ function memoize(fn) {
  * @return {Number} index of element in array or -1 if not found
  */
 function getIndex(arr, elem) {
-   var i,
-       l = arr.length;
+	var i, l = arr.length;
 
-   for (i = 0; i < l; ++i) {
-      if (elem.id === arr[i].id) return i;
-   }
+	for (i = 0; i < l; ++i) {
+		if (elem.id === arr[i].id) return i;
+	}
 
-   return -1;
+	return -1;
 }
 
 /**
@@ -220,14 +213,14 @@ function getIndex(arr, elem) {
  * @return {Number} where ouputMin <= output <= outputMax
  */
 function generateScale(inputMin, inputMax, outputMin, outputMax) {
-   var inputDiff = inputMax - inputMin,
-       outputDiff = outputMax - outputMin;
+	var inputDiff = inputMax - inputMin,
+		outputDiff = outputMax - outputMin;
 
-   return function _scale(x) {
-      var test = (outputDiff * (x - inputMin) / inputDiff) + outputMin;
+	return function _scale(x) {
+		var test = (outputDiff * (x - inputMin) / inputDiff) + outputMin;
 
-      return test < outputMin ? outputMin : test > outputMax ? outputMax : test;
-   };   
+		return test < outputMin ? outputMin : test > outputMax ? outputMax : test;
+	};   
 }
 
 /**
@@ -238,60 +231,60 @@ function generateScale(inputMin, inputMax, outputMin, outputMax) {
  * @return {Object} monad for wrapping values
  */
 function monad(modifier) {
-   var prototype = Object.create(null);
+	var prototype = Object.create(null);
 
-   prototype._is_monad = true;
+	prototype._is_monad = true;
 
-   function unit(value) {
-      var monad = Object.create(prototype);
+	function unit(value) {
+		var monad = Object.create(prototype);
 
-      if (typeof modifier === 'function') {
-         value = modifier(monad, value);
-      }
+		if (typeof modifier === 'function') {
+			value = modifier(monad, value);
+		}
 
-      monad.bind = function (fn, args) {
-         var argsCopy = args ? [].slice.call(args) : [],
-             result = fn.apply(null, [value].concat(argsCopy));
+		monad.bind = function (fn, args) {
+			var argsCopy = args ? [].slice.call(args) : [],
+				result = fn.apply(null, [value].concat(argsCopy));
 
-         return result && result._is_monad ? result : unit(result);
-      };
+			return result && result._is_monad ? result : unit(result);
+		};
 
-      monad.value = function () { return value; };
+		monad.value = function () { return value; };
 
-      return monad;
-   }
+		return monad;
+	}
 
-   unit.lift = function (name, fn) {
-      if (prototype[name]) throw new Error('"' + name + '" is already defined');
+	unit.lift = function (name, fn) {
+		if (prototype[name]) throw new Error('"' + name + '" is already defined');
 
-      prototype[name] = function (/* args */) {
-         var result = this.bind(fn, arguments);
-         return result && result._is_monad ? result : unit(result);
-      };
+		prototype[name] = function (/* args */) {
+			var result = this.bind(fn, arguments);
+			return result && result._is_monad ? result : unit(result);
+		};
 
-      return unit;
-   };
+		return unit;
+	};
 
-   return unit;
+	return unit;
 }
 
 module.exports = {
-   clone: clone,
-   merge: merge,
-   slice: slice,
-   splice: splice,
-   reduce: reduce,
-   existy: existy,
-   dispatch: dispatch,
-   noop: function(){},
-   identity: identity,
-   curry: curry,
-   partial: partial,
-   compose: compose,
-   monad: monad,
-   sortNumeric: sortNumeric,
-   values: values,
-   memoize: memoize,
-   getIndex: getIndex,
-   genScale: generateScale
+	clone: clone,
+	merge: merge,
+	slice: slice,
+	splice: splice,
+	reduce: reduce,
+	existy: existy,
+	dispatch: dispatch,
+	noop: function(){},
+	identity: identity,
+	curry: curry,
+	partial: partial,
+	compose: compose,
+	monad: monad,
+	sortNumeric: sortNumeric,
+	values: values,
+	memoize: memoize,
+	getIndex: getIndex,
+	genScale: generateScale
 };

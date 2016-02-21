@@ -22,8 +22,8 @@
   },
   "homepage": "https://github.com/edhille/funtils",
   "devDependencies": {
-    "chai": "^1.9.2",
-    "mocha": "^1.21.5",
+    "chai": "^3.5.0",
+    "mocha": "^2.4.5",
     "sinon": "^1.10.3"
   }
 }

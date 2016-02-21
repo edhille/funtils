@@ -176,11 +176,11 @@ function memoize(fn) {
 	return function _memoize() {
 		var key = JSON.stringify(arguments);
 
-		if (typeof memo[key] === 'undefined') {
-			memo[key] = fn.apply(null, arguments);
+		if (!existy(memo[key])) {
+			memo[key] = { value: fn.apply(null, arguments) };
 		}
 
-		return memo[key];
+		return memo[key].value;
 	};
 }
 

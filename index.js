@@ -234,6 +234,7 @@ function monad(modifier) {
 	var prototype = Object.create(null);
 
 	prototype._is_monad = true;
+	prototype.toString = Object.prototype.toString;
 
 	function unit(value) {
 		var monad = Object.create(prototype);

@@ -321,4 +321,20 @@ describe('utils', function() {
 			monad.lifted().value().should.equal('initial value - modified - lifted - modified');
 		});
 	});
+
+	describe('#debounce', function () {
+		it('should not call fn more than once when invoked repeatedly within debounce window', function (done) {
+			var testFn = sinon.spy();
+			var delay = 10;
+			var debouncedTestFn = utils.debounce(testFn, delay);
+
+			setTimeout(function() {
+				testFn.callCount.should.equal(1);
+				done();
+			}, delay + 2);
+
+			debouncedTestFn();
+			debouncedTestFn();
+		});
+	});
 });

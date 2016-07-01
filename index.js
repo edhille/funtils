@@ -269,6 +269,25 @@ function monad(modifier) {
 	return unit;
 }
 
+/**
+ * prevent function from running more than once per N milliseconds
+ *
+ * @param {Function} fn - function to debounce
+ * @param {Number} delay - number of milliseconds to delay
+ *
+ * @return {Function} wrapped fn whose calls are debounced
+ */
+function debounce(fn, delay) {
+	var timer = null;
+	return function () {
+		var context = this, args = arguments;
+		clearTimeout(timer);
+		timer = setTimeout(function () {
+			fn.apply(context, args);
+		}, delay);
+	};
+}
+
 module.exports = {
 	clone: clone,
 	merge: merge,
@@ -287,5 +306,6 @@ module.exports = {
 	values: values,
 	memoize: memoize,
 	getIndex: getIndex,
-	genScale: generateScale
+	genScale: generateScale,
+	debounce: debounce
 };
